@@ -3,7 +3,7 @@
 from models.base_model import BaseModel
 
 
-class Useer(BaseModel):
+class User(BaseModel):
     '''Inherits from BaseModel'''
 
     email = ''

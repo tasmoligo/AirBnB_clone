@@ -4,9 +4,9 @@
 import cmd
 from models.base_model import BaseModel
 from shlex import split
-from models import storage
+from models.__init__ import storage
 import sys
-from user import User
+from models.user import User
 from models.place import Place
 from models.state import State
 from models.city import City
@@ -17,7 +17,8 @@ from models.review import Review
 class HBNBCommand(cmd.Cmd):
     '''class definition'''
     prompt = "(hbnb) "
-    classes = {'BaseModel': 'BaseModel'}
+    classes = {'BaseModel': BaseModel, 'State': State, 'Place': Place,
+            'City': City, 'Review': Review, 'Amenity': Amenity, 'User': User}
 
     def do_quit(self, line):
         '''quit to exit the interpreter'''
@@ -25,6 +26,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, line):
         '''EOF to exit the interpreter'''
+        print('')
         return True
 
     def emptyline(self):
@@ -38,7 +40,7 @@ class HBNBCommand(cmd.Cmd):
                 class_name = getattr(sys.modules[__name__], arguments)
                 instance = class_name()
                 print(instance.id)
-                models.storage.save()
+                storage.save()
             else:
                 print("** class doesn't exist **")
         else:
@@ -47,7 +49,7 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, arguments):
         '''Prints the string representation of an instance based on the class
         name and id'''
-        arg = shlex.split(arguments)
+        arg = split(arguments)
         if len(arg) == 0:
             print("** class name missing **")
         elif len(arg) == 1:
@@ -55,7 +57,7 @@ class HBNBCommand(cmd.Cmd):
         elif arg[0] not in self.classes:
             print("** class doesn't exist **")
         else:
-            store = models.storage.all()
+            store = storage.all()
             # Key has format <className>.id
             argus = arg[0] + '.' + str(arg[1])
             if argus in store:
@@ -66,7 +68,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, arguments):
         ''' Deletes an instance based on the class name and id'''
-        arg = shlex.split(arguments)
+        arg = split(arguments)
         if len(arg) == 0:
             print("** class name missing **")
             return
@@ -89,14 +91,14 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, arguments):
         ''' Prints all string representation of all instances based or not on
         the class name'''
-        arg = shlex.split(arguments)
+        arg = split(arguments)
         arg_list = []
-        store = models.storage.all()
+        store = storage.all()
         if len(arg) == 0:
             for key in store:
-                instances = str(dic[key])
-                listI.append(instance)
-            print(listI)
+                instance = str(store[key])
+                arg_list.append(instance)
+            print(arg_list)
             return
         if arg[0] not in self.classes:
             print("** class doesn't exist **")
@@ -113,6 +115,7 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arguments):
         ''' Updates an instance based on the class name and id by adding or
         updating attribute'''
+        arg = split(arguments)
         if len(arg) == 0:
             print("** class name missing **")
             return
@@ -129,7 +132,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         key = arg[0] + "." + arg[1]
-        store = models.storage.all()
+        store = storage.all()
         try:
             store_key = store[key]
         except KeyError:
@@ -141,12 +144,12 @@ class HBNBCommand(cmd.Cmd):
         except AttributeError:
             pass
         setattr(store_key, arg[2], arg[3])
-        models.storage.save()
+        storage.save()
 
     def do_count(self, aeguments):
         '''Retrieves the number of instances of a class'''
-        arg = shlex.split(arguments)
-        store = models.storage.all()
+        arg = split(arguments)
+        store = storage.all()
         num_of_instance = 0
         if arg[0] not in self.classes:
             print("** class doesn't exist **")
