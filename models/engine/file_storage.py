@@ -42,8 +42,10 @@ class FileStorage:
     def classes(self):
         """Return valid class drctionary and their references"""
         from models.base_model import BaseModel
+        from models.user import User
 
         classes = {"BaseModel": BaseModel,
+                   "User": User,
                    }
         return classes
 
@@ -54,5 +56,10 @@ class FileStorage:
                      {"id": str,
                       "created_at": datetime.datetime,
                       "updated_at": datetime.datetime},
+            "User":
+                {"email": str,
+                 "password": str,
+                 "first_name": str,
+                 "last_name": str},
         }
         return attributes
