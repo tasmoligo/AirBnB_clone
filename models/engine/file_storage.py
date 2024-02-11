@@ -42,11 +42,16 @@ class FileStorage:
     def classes(self):
         """Return valid class drctionary and their references"""
         from models.base_model import BaseModel
-        from models.user import User
+        from models.user import User, State, City, Amenity
+        from models.user import Place, Review
 
         classes = {"BaseModel": BaseModel,
                    "User": User,
-                   }
+                   "State": State,
+                   "City": City,
+                   "Amenity": Amenity,
+                   "Place": Place,
+                   "Review": Review}
         return classes
 
     def attributes(self):
@@ -61,5 +66,20 @@ class FileStorage:
                     "password": str,
                     "first_name": str,
                     "last_name": str},
+            "State":
+                {"name": str},
+            "City":{"state_id": str, "name":str},
+            "Amenity": {"name": str},
+            "Place":
+                {"city_id": str,
+                 "user_id": str,
+                 "name": str,
+                 "description": str,
+                 "number_rooms": int,
+                 "number_bathrooms": int,
+                 "max_guest": int,
+                 "price_by_night": int,
+                 "latitude": float,
+                 "longitude" float}
         }
         return attributes
