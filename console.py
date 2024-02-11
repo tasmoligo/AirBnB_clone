@@ -8,25 +8,24 @@ import re
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
-    
-    
+
     def do_EOF(self, line):
         """Handles End of file Charater"""
         print()
         return True
-    
+
     def do_quit(self, line):
         """Quit command to exit the program"""
         print()
         return True
-    
+
     def emptyline(self):
         """Empty line that does nothing"""
         pass
-        
+
     def do_create(self, line):
-        """Creates a new instance of the specified model class, saves it to a JSON file,
-       and prints the assigned ID.
+        """Creates a new instance of the specified model class
+        saves it to a JSON file,and prints the assigned ID.
         """
         if line == "" or line is None:
             print("** class name missing **")
@@ -37,9 +36,9 @@ class HBNBCommand(cmd.Cmd):
             obj = class_obj()
             obj.save()
             print(obj.id)
-    
+
     def do_show(self, line):
-        """Prints the string representation 
+        """Prints the string representation
         of an instance based on the class name and id.
         """
         if line == "" or line is None:
@@ -51,17 +50,16 @@ class HBNBCommand(cmd.Cmd):
             elif len(args) < 2:
                 print("** instance id missing **")
             else:
-               instance_id = args[1]
-               key = "{}.{}".format(args[0], instance_id)
-               instances = storage.all()
-               if key not in instances:
-                   print("** no instance found **") 
-               else:
-                   print(instances[key])
-                
+                instance_id = args[1]
+                key = "{}.{}".format(args[0], instance_id)
+                instances = storage.all()
+                if key not in instances:
+                    print("** no instance found **")
+                else:
+                    print(instances[key])
+
     def do_destroy(self, line):
         """Deletes an instance based on the class name and id"""
-        
         if line == "" or line is None:
             print("** class name missing **")
         else:
@@ -71,31 +69,29 @@ class HBNBCommand(cmd.Cmd):
             elif len(args) < 2:
                 print("** instance id missing **")
             else:
-               instance_id = args[1]
-               key = "{}.{}".format(args[0], instance_id)
-               instances = storage.all()
-               if key not in instances:
-                   print("** no instance found **") 
-               else:
-                   del instances[key]
-                   storage.save()
-                   
-            
+                instance_id = args[1]
+                key = "{}.{}".format(args[0], instance_id)
+                instances = storage.all()
+                if key not in instances:
+                    print("** no instance found **")
+                else:
+                    del instances[key]
+                    storage.save()
+
     def do_all(self, line):
         """Prints the string representation of all instances."""
-    
         if line != "":
             args = line.split(' ')
             if args[0] not in storage.classes():
                 print("** class doesn't exist **")
             else:
                 instance = [str(obj) for key, obj in storage.all().items()
-                      if type(obj).__name__ == args[0]]
+                            if type(obj).__name__ == args[0]]
                 print(instance)
         else:
             new_list = [str(obj) for key, obj in storage.all().items()]
             print(new_list)
-            
+
     def do_update(self, line):
         """Updates an instance based on the class name and id."""
         if line == "" or line is None:
@@ -138,9 +134,10 @@ class HBNBCommand(cmd.Cmd):
                     try:
                         value = cast(value)
                     except ValueError:
-                        pass 
+                        pass
                 setattr(storage.all()[key], attribute, value)
                 storage.all()[key].save()
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
