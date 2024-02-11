@@ -80,6 +80,6 @@ class FileStorage:
                  "max_guest": int,
                  "price_by_night": int,
                  "latitude": float,
-                 "longitude" float}
+                 "longitude": float}
         }
         return attributes
